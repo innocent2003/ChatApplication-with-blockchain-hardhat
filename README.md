@@ -1,6 +1,6 @@
-npx hardhat --init
-npx hardhat build
-npx hardhat test
-Terminal window
-npx hardhat test solidity
+npx hardhat --init<br>
+npx hardhat build <br>
+npx hardhat test <br>
+Terminal window <br>
+npx hardhat test solidity <br>
 

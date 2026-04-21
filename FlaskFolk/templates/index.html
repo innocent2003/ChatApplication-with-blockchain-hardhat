@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blockchain Chat</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: auto;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .msg {
+            margin-bottom: 8px;
+            padding: 5px;
+            background: #f1f1f1;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>💬 Blockchain Chat</h2>
+
+<div id="messages"></div>
+
+<input type="text" id="msgInput" placeholder="Enter message..." style="width:80%">
+<button onclick="sendMessage()">Send</button>
+
+<script>
+async function sendMessage() {
+    const msg = document.getElementById("msgInput").value;
+
+    await fetch("/send", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: msg })
+    });
+
+    document.getElementById("msgInput").value = "";
+    loadMessages();
+}
+
+async function loadMessages() {
+    const res = await fetch("/messages");
+    const data = await res.json();
+
+    const box = document.getElementById("messages");
+    box.innerHTML = "";
+
+    data.forEach(m => {
+        const div = document.createElement("div");
+        div.className = "msg";
+        div.innerHTML = `<b>${m.user}</b>: ${m.hash}`;
+        box.appendChild(div);
+    });
+
+    box.scrollTop = box.scrollHeight;
+}
+
+// Auto refresh mỗi 3s
+setInterval(loadMessages, 3000);
+
+// load lần đầu
+loadMessages();
+</script>
+
+</body>
+</html>
